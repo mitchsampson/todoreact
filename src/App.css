@@ -1,43 +1,73 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* App.css */
+body {
+  background-color: #8DD69C;
+  background-image: radial-gradient(at 47% 33%, hsl(162.00, 77%, 40%) 0, transparent 59%),
+                    radial-gradient(at 82% 65%, hsl(198.00, 100%, 50%) 0, transparent 55%);
+  font-family: 'Poppins', sans-serif;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.step-input {
+  border-color: #174E75;
+  border-width: 2px;
+  border-style: solid;
+  transition: box-shadow 0.3s ease;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.step-input:focus {
+  box-shadow: 0 0 0 3px rgba(23, 78, 117, 0.3);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.step-button {
+  background-color: #D34B80;
+  transition: transform 0.3s ease;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.step-button:hover {
+  transform: scale(1.05);
 }
 
-.card {
-  padding: 2em;
+.step-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.read-the-docs {
-  color: #888;
+.step-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-text {
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.custom-header {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+.custom-logo {
+  max-height: 200px;
+  margin-top: 13px;
+}
+
+.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+  transition: opacity 1s ease;
+}
+
+.completed.disappear {
+  opacity: 0;
+}
+
+.nav-link {
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #D34B80;
 }

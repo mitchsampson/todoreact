@@ -1,0 +1,19 @@
+.step-input {
+    border-color: #174E75;
+    border-width: 2px;
+    border-style: solid;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .step-input:focus {
+    box-shadow: 0 0 0 3px rgba(23, 78, 117, 0.3);
+  }
+  
+  .step-button {
+    background-color: #D34B80;
+    transition: transform 0.3s ease;
+  }
+  
+  .step-button:hover {
+    transform: scale(1.05);
+  }

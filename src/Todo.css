@@ -1,0 +1,18 @@
+.step-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .step-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+    transition: opacity 1s ease;
+  }
+  
+  .completed.disappear {
+    opacity: 0;
+  }

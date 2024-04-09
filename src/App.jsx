@@ -1,35 +1,39 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import wustlLogo from './assets/wustl.svg'
-import './App.css'
+import './App.css';
+import Todo from './Todo';
+import NewTodo from './NewTodo';
 
 function App() {
-
   return (
     <>
-      <div>
-        <a href="https://wustl.edu" target="_blank" rel="noreferrer">
-          <img src={wustlLogo} className="logo wustl" alt="WUSTL logo" />
-        </a>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>WUSTL + Vite + React</h1>
-      <h2>MITCHELL SAMPSON - ToDo App</h2>
-      <div className="card">
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the WUSTL, Vite and React logos to learn more
-      </p>
+      <header className="bg-white bg-opacity-90 shadow-lg custom-header">
+        <img src="transparentlogo.png" alt="STEP1 Logo" className="custom-logo" />
+        <nav>
+          <ul className="flex space-x-4">
+            <li><a href="#" className="nav-link text-\[#174E75\] font-semibold">Home</a></li>
+            <li><a href="#" className="nav-link text-\[#174E75\] font-semibold">Contact</a></li>
+            <li><a href="#" className="nav-link text-\[#174E75\] font-semibold">FAQ</a></li>
+          </ul>
+        </nav>
+      </header>
+      <main className="container mx-auto mt-8 px-4">
+        <section className="bg-white bg-opacity-90 rounded-lg shadow-lg p-6">
+          <h2 className="text-2xl font-semibold text-\[#174E75\] mb-4 header-text">Add Task</h2>
+          <NewTodo />
+          <h2 className="text-2xl font-semibold text-\[#174E75\] mb-4 header-text">Your Tasks</h2>
+          <ul id="todo-list" className="space-y-4">
+            <Todo />
+          </ul>
+          <p id="no-tasks" className="text-gray-600">No tasks currently added.</p>
+          <button id="delete-selected" className="step-button text-white px-6 py-2 text-base font-semibold mt-4">Delete Selected</button>
+        </section>
+      </main>
+      <footer className="bg-\[#174E75\] text-white py-4 mt-8">
+        <div className="container mx-auto text-center">
+          <p>&copy; 2024 STEP1. All rights reserved.</p>
+        </div>
+      </footer>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
