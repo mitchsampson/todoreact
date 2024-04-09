@@ -19,6 +19,7 @@ function App() {
         </a>
       </div>
       <h1>WUSTL + Vite + React</h1>
+      <h2>MITCHELL SAMPSON - ToDo App</h2>
       <div className="card">
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
