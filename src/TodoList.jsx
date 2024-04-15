@@ -1,8 +1,6 @@
 // TodoList.jsx
-
 import React, { useEffect, useState } from 'react';
 import TodoItem from './TodoItem';
-import TodoForm from './TodoForm';
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
@@ -102,7 +100,6 @@ const TodoList = () => {
       <button onClick={deleteSelectedTodos} className="step-button text-white px-6 py-2 text-base font-semibold mt-4">
         Delete Selected
       </button>
-      <TodoForm fetchTodos={fetchTodos} />
     </>
   );
 };
