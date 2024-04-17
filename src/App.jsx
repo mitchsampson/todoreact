@@ -17,33 +17,55 @@ const App = () => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
+  useEffect(() => {
+    setTodos((currentTodos) => sortTodoList(currentTodos, sortBy, sortOrder));
+  }, [sortBy, sortOrder]);
+
+  const sortTodoList = (todoList, sortBy, order) => {
+    let sortedTodos = [...todoList];
+    switch (sortBy) {
+      case 'alphabetical':
+        sortedTodos.sort((a, b) => a.text.localeCompare(b.text));
+        break;
+      case 'created':
+        sortedTodos.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        break;
+      case 'completed':
+        sortedTodos.sort((a, b) => a.completed - b.completed);
+        break;
+      default:
+        return todoList;
+    }
+
+    if (order === 'descending') {
+      sortedTodos.reverse();
+    }
+
+    return sortedTodos;
+  };
+
   const addTodo = (text) => {
     const todo = {
       text,
       completed: false,
       selected: false,
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(),
     };
-    setTodos([...todos, todo]);
+    const newTodos = [...todos, todo];
+    setTodos(sortTodoList(newTodos, sortBy, sortOrder));
   };
 
   const toggleComplete = (index) => {
     const updatedTodos = [...todos];
     updatedTodos[index].completed = !updatedTodos[index].completed;
-    setTodos(updatedTodos);
-
-    if (updatedTodos[index].completed) {
-      setTimeout(() => {
-        setTodos(todos.filter((_, i) => i !== index));
-      }, 1000);
-    }
+    setTodos(sortTodoList(updatedTodos, sortBy, sortOrder));
   };
 
   const deleteTodo = (index, strikethrough = false) => {
     if (strikethrough) {
       const updatedTodos = [...todos];
       updatedTodos[index].completed = true;
-      setTodos(updatedTodos);
+      setTodos(sortTodoList(updatedTodos, sortBy, sortOrder));
       setTimeout(() => {
         setTodos(todos.filter((_, i) => i !== index));
       }, 1000);
@@ -54,29 +76,6 @@ const App = () => {
 
   const deleteSelectedTodos = () => {
     setTodos(todos.filter((todo) => !todo.selected));
-  };
-
-  const sortTodos = () => {
-    const sortedTodos = [...todos];
-    switch (sortBy) {
-      case 'alphabetical':
-        sortedTodos.sort((a, b) => a.text.localeCompare(b.text));
-        break;
-      case 'created':
-        sortedTodos.sort((a, b) => a.createdAt - b.createdAt);
-        break;
-      case 'completed':
-        sortedTodos.sort((a, b) => a.completed - b.completed);
-        break;
-      default:
-        break;
-    }
-
-    if (sortOrder === 'descending') {
-      sortedTodos.reverse();
-    }
-
-    setTodos(sortedTodos);
   };
 
   const handleSubmit = (event) => {
@@ -177,7 +176,7 @@ const App = () => {
         </section>
         <section className="bg-white bg-opacity-90 rounded-lg shadow-lg p-6 mt-8">
           <h2 className="text-2xl font-semibold text-[#174E75] mb-4 header-text">Sort Tasks</h2>
-          <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-col space-y-2">
               <label htmlFor="sort-select" className="font-semibold">
                 Sort by:
