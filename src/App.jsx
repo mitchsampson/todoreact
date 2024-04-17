@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import logo from './assets/transparentlogo.png';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
@@ -90,7 +91,7 @@ const App = () => {
   return (
     <div className="App">
       <header className="bg-white bg-opacity-90 shadow-lg custom-header">
-        <img src="transparentlogo.png" alt="STEP1 Logo" className="custom-logo" />
+        <img src={logo} alt="STEP1 Logo" className="custom-logo" />
         <nav>
           <ul className="flex space-x-4">
             <li>
@@ -177,7 +178,7 @@ const App = () => {
         <section className="bg-white bg-opacity-90 rounded-lg shadow-lg p-6 mt-8">
           <h2 className="text-2xl font-semibold text-[#174E75] mb-4 header-text">Sort Tasks</h2>
           <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-col space-y-2">
               <label htmlFor="sort-select" className="font-semibold">
                 Sort by:
               </label>
@@ -185,7 +186,7 @@ const App = () => {
                 id="sort-select"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="step-input rounded px-4 py-2 text-base focus:outline-none"
+                className="w-full step-input rounded px-4 py-2 text-base focus:outline-none"
               >
                 <option value="default">Default</option>
                 <option value="alphabetical">Alphabetical</option>
@@ -193,7 +194,7 @@ const App = () => {
                 <option value="completed">Completed Status</option>
               </select>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-col space-y-2">
               <label htmlFor="sort-order" className="font-semibold">
                 Order:
               </label>
@@ -201,7 +202,7 @@ const App = () => {
                 id="sort-order"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
-                className="step-input rounded px-4 py-2 text-base focus:outline-none"
+                className="w-full step-input rounded px-4 py-2 text-base focus:outline-none"
               >
                 <option value="ascending">Ascending</option>
                 <option value="descending">Descending</option>
