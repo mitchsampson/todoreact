@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import logo from './assets/transparentlogo.png';
-import TaskList from './TaskList';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
   const [todoInput, setTodoInput] = useState('');
   const [sortBy, setSortBy] = useState('default');
   const [sortOrder, setSortOrder] = useState('ascending');
-  const [selectedTodos, setSelectedTodos] = useState([]);
   const apiKey = 'f7e95a-24d4ce-e5fd7c-b60c75-f408f2';
 
   useEffect(() => {
@@ -23,8 +21,8 @@ const App = () => {
         }
       });
       if (response.ok) {
-        const fetchedTodos = await response.json();
-        setTodos(sortTodoList(fetchedTodos));
+        const todos = await response.json();
+        setTodos(sortTodoList(todos, sortBy, sortOrder));
       }
     } catch (error) {
       console.error('Error fetching ToDos:', error);
@@ -32,10 +30,10 @@ const App = () => {
   };
 
   useEffect(() => {
-    setTodos(currentTodos => sortTodoList(currentTodos));
+    setTodos((currentTodos) => sortTodoList(currentTodos, sortBy, sortOrder));
   }, [sortBy, sortOrder]);
 
-  const sortTodoList = (todoList) => {
+  const sortTodoList = (todoList, sortBy, order) => {
     let sortedTodos = [...todoList];
     switch (sortBy) {
       case 'alphabetical':
@@ -48,11 +46,13 @@ const App = () => {
         sortedTodos.sort((a, b) => a.completed - b.completed);
         break;
       default:
-        sortedTodos = todoList;
+        return todoList;
     }
-    if (sortOrder === 'descending') {
+
+    if (order === 'descending') {
       sortedTodos.reverse();
     }
+
     return sortedTodos;
   };
 
@@ -74,34 +74,46 @@ const App = () => {
     }
   };
 
+  const toggleComplete = async (todoId, completed) => {
+    try {
+      const response = await fetch(`http://cse204.work/todos/${todoId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY': apiKey
+        },
+        body: JSON.stringify({ completed })
+      });
+      if (response.ok) {
+        fetchTodos();
+      }
+    } catch (error) {
+      console.error('Error updating ToDo status:', error);
+    }
+  };
+
+  const deleteTodo = async (todoId) => {
+    try {
+      const response = await fetch(`http://cse204.work/todos/${todoId}`, {
+        method: 'DELETE',
+        headers: {
+          'X-API-KEY': apiKey
+        }
+      });
+      if (response.ok) {
+        fetchTodos();
+      }
+    } catch (error) {
+      console.error('Error deleting ToDo:', error);
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const text = todoInput.trim();
     if (text !== '') {
       addTodo(text);
       setTodoInput('');
-    }
-  };
-
-  const deleteSelectedTodos = async () => {
-    try {
-      await Promise.all(
-        selectedTodos.map(async (todoId) => {
-          const response = await fetch(`http://cse204.work/todos/${todoId}`, {
-            method: 'DELETE',
-            headers: {
-              'X-API-KEY': apiKey
-            }
-          });
-          if (!response.ok) {
-            throw new Error('Error deleting ToDo');
-          }
-        })
-      );
-      setSelectedTodos([]);
-      fetchTodos();
-    } catch (error) {
-      console.error('Error deleting selected ToDos:', error);
     }
   };
 
@@ -144,13 +156,31 @@ const App = () => {
               Add
             </button>
           </form>
-          <TaskList
-            todos={todos}
-            fetchTodos={fetchTodos}
-            selectedTodos={selectedTodos}
-            setSelectedTodos={setSelectedTodos}
-            deleteSelectedTodos={deleteSelectedTodos}
-          />
+          <h2 className="text-2xl font-semibold text-[#174E75] mb-4 header-text">Your Tasks</h2>
+          <ul className="space-y-4">
+            {todos.map((todo) => (
+              <li
+                key={todo.id}
+                className={`step-item bg-white rounded-lg p-4 flex justify-between items-center ${
+                  todo.completed ? 'completed' : ''
+                }`}
+                tabIndex={0}
+                onClick={() => toggleComplete(todo.id, !todo.completed)}
+              >
+                <span className="text-base flex-grow">{todo.text}</span>
+                <button
+                  className="delete-btn text-red-500 font-semibold ml-4 focus:outline-none"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteTodo(todo.id);
+                  }}
+                >
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
+          {todos.length === 0 && <p className="text-gray-600">No tasks currently added.</p>}
         </section>
         <section className="bg-white bg-opacity-90 rounded-lg shadow-lg p-6 mt-8">
           <h2 className="text-2xl font-semibold text-[#174E75] mb-4 header-text">Sort Tasks</h2>
