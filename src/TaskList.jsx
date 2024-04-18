@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TaskList = ({ todos, fetchTodos }) => {
+const TaskList = ({ todos, fetchTodos, selectedTodos, setSelectedTodos, deleteSelectedTodos }) => {
   const toggleComplete = async (todoId, completed) => {
     try {
       const response = await fetch(`http://cse204.work/todos/${todoId}`, {
@@ -51,14 +51,20 @@ const TaskList = ({ todos, fetchTodos }) => {
             <div className="flex items-center">
               <input
                 type="checkbox"
-                checked={todo.completed}
-                onChange={() => toggleComplete(todo.id, !todo.completed)}
+                checked={selectedTodos.includes(todo.id)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setSelectedTodos([...selectedTodos, todo.id]);
+                  } else {
+                    setSelectedTodos(selectedTodos.filter((id) => id !== todo.id));
+                  }
+                }}
                 className="mr-2"
               />
               <button
                 className="delete-btn text-red-500 font-semibold focus:outline-none"
                 onClick={(e) => {
-                  e.stopPropagation();  // Prevents the onClick event of the li from firing when the button is clicked
+                  e.stopPropagation();
                   deleteTodo(todo.id);
                 }}
               >
@@ -69,6 +75,14 @@ const TaskList = ({ todos, fetchTodos }) => {
         ))}
         {todos.length === 0 && <p className="text-gray-600">No tasks currently added.</p>}
       </ul>
+      {selectedTodos.length > 0 && (
+        <button
+          className="step-button text-white px-6 py-2 text-base font-semibold mt-4"
+          onClick={deleteSelectedTodos}
+        >
+          Delete Selected
+        </button>
+      )}
     </section>
   );
 };
