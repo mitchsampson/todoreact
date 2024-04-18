@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
 import logo from './assets/transparentlogo.png';
 import TaskList from './TaskList';
@@ -17,15 +18,12 @@ const App = () => {
 
   const fetchTodos = async () => {
     try {
-      const response = await fetch('http://cse204.work/todos', {
+      const response = await axios.get('http://cse204.work/todos', {
         headers: {
           'X-API-KEY': apiKey
         }
       });
-      if (response.ok) {
-        const fetchedTodos = await response.json();
-        setTodos(sortTodoList(fetchedTodos));
-      }
+      setTodos(sortTodoList(response.data));
     } catch (error) {
       console.error('Error fetching ToDos:', error);
     }
@@ -58,15 +56,13 @@ const App = () => {
 
   const addTodo = async (text) => {
     try {
-      const response = await fetch('http://cse204.work/todos', {
-        method: 'POST',
+      const response = await axios.post('http://cse204.work/todos', { text }, {
         headers: {
           'Content-Type': 'application/json',
           'X-API-KEY': apiKey
-        },
-        body: JSON.stringify({ text })
+        }
       });
-      if (response.ok) {
+      if (response.status === 200) {
         fetchTodos();
       }
     } catch (error) {
@@ -87,13 +83,12 @@ const App = () => {
     try {
       await Promise.all(
         selectedTodos.map(async (todoId) => {
-          const response = await fetch(`http://cse204.work/todos/${todoId}`, {
-            method: 'DELETE',
+          const response = await axios.delete(`http://cse204.work/todos/${todoId}`, {
             headers: {
               'X-API-KEY': apiKey
             }
           });
-          if (!response.ok) {
+          if (response.status !== 200) {
             throw new Error('Error deleting ToDo');
           }
         })

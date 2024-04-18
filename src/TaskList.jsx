@@ -1,17 +1,16 @@
 import React from 'react';
+import axios from 'axios';
 
 const TaskList = ({ todos, fetchTodos, selectedTodos, setSelectedTodos, deleteSelectedTodos }) => {
   const toggleComplete = async (todoId, completed) => {
     try {
-      const response = await fetch(`http://cse204.work/todos/${todoId}`, {
-        method: 'PUT',
+      const response = await axios.put(`http://cse204.work/todos/${todoId}`, { completed }, {
         headers: {
           'Content-Type': 'application/json',
           'X-API-KEY': 'f7e95a-24d4ce-e5fd7c-b60c75-f408f2'
-        },
-        body: JSON.stringify({ completed })
+        }
       });
-      if (response.ok) {
+      if (response.status === 200) {
         fetchTodos();
       }
     } catch (error) {
@@ -21,13 +20,12 @@ const TaskList = ({ todos, fetchTodos, selectedTodos, setSelectedTodos, deleteSe
 
   const deleteTodo = async (todoId) => {
     try {
-      const response = await fetch(`http://cse204.work/todos/${todoId}`, {
-        method: 'DELETE',
+      const response = await axios.delete(`http://cse204.work/todos/${todoId}`, {
         headers: {
           'X-API-KEY': 'f7e95a-24d4ce-e5fd7c-b60c75-f408f2'
         }
       });
-      if (response.ok) {
+      if (response.status === 200) {
         fetchTodos();
       }
     } catch (error) {
